@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class Socket : Type
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        Debug.Log("Collision Detected");
 
-        //if(other.GetComponent<Plug>() != null)
-        //{
-            other.transform.position = transform.position;        
-        //}
+        if(other.GetComponent<Plug>() != null)
+        {
+            if(CompareType(other.GetComponent<Plug>().type))
+            {
+                Debug.Log("Socket and Plug match!");
+                other.transform.position = transform.position;        
+            }
+        }
     }
 
     float radius;

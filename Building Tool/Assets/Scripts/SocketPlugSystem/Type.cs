@@ -12,4 +12,10 @@ public class Type : MonoBehaviour
     }
 
     public O_Type type;
+
+    public bool CompareType(O_Type itype)
+    {
+        if (itype == type) return true;
+        else return false;
+    }
 }
