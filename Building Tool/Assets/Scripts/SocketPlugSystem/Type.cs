@@ -11,11 +11,11 @@ public class Type : MonoBehaviour
         Roof
     }
 
-    public O_Type type;
+    public O_Type PlugType;
 
     public bool CompareType(O_Type itype)
     {
-        if (itype == type) return true;
+        if (itype == PlugType) return true;
         else return false;
     }
 }

@@ -8,7 +8,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Water, UI, Plug
 - Active game object:
-  - Name: NonPlug
+  - Name: Wall
   - Tag: Untagged
   - Layer: Plug
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
