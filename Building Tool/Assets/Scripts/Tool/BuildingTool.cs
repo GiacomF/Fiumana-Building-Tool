@@ -10,8 +10,12 @@ public class BuildingTool : EditorWindow
         GetWindow<BuildingTool>("Build Tool");
     }
 
-    public List<GameObject> compList = new List<GameObject>();
+    void OnEnable()
+    {
+        
+    }
 
+    public List<GameObject> compList = new List<GameObject>();
     private void GenerateComponent(int listPos)
     {
         Instantiate(compList[listPos], new Vector3(0,0,0), Quaternion.identity);

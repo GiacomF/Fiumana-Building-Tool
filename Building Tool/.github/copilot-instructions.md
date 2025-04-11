@@ -6,9 +6,9 @@
   - Tags:
     - Untagged, Respawn, Finish, EditorOnly, MainCamera, Player, GameController
   - Layers:
-    - Default, TransparentFX, Ignore Raycast, Water, UI, Plug
+    - Default, TransparentFX, Ignore Raycast, Water, UI, Plug, BuildableSurface
 - Active game object:
-  - Name: Wall
+  - Name: Plane
   - Tag: Untagged
-  - Layer: Plug
+  - Layer: BuildableSurface
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
