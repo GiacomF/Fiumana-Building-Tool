@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,54 +9,68 @@ public class BuildingTool : EditorWindow
         GetWindow<BuildingTool>("Build Tool");
     }
 
-    void OnEnable()
+    GameObject pointer;
+
+    private void GenerateComponent(int listPos, Vector3 pos)
     {
-        
+        Instantiate(settings.compList[listPos], pos, Quaternion.identity);
     }
 
-    public List<GameObject> compList = new List<GameObject>();
-    private void GenerateComponent(int listPos)
+    Settings_SO settings;
+    void HandleSettings()
     {
-        Instantiate(compList[listPos], new Vector3(0,0,0), Quaternion.identity);
+        settings = (Settings_SO)EditorGUILayout.ObjectField("Settings_SO", settings, typeof(Settings_SO), false);
     }
 
-    void HandlePrefabList()
-    {
-
-        SerializedObject serObj = new SerializedObject(this);
-        SerializedProperty listProp = serObj.FindProperty("compList");
-        
-        serObj.Update();
-
-        GUILayout.Label("ComponentsList", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(listProp, true);
-
-        serObj.ApplyModifiedProperties();
-    }
-
+    bool isToolOn = false;
     private void OnGUI()
     {
-        HandlePrefabList();
+        HandleSettings();
+        
+        if(GUILayout.Button("Tool On"))
+        {    
+            if(!isToolOn)
+            {
+                isToolOn = true;
 
-        GUILayout.BeginVertical();
+                pointer = Instantiate(settings.pointer);
 
-        if(GUILayout.Button("Floor"))
-        {
-            GenerateComponent(0);
+                GUILayout.BeginVertical();
+
+                if(pointer != null)
+                {
+                    if(GUILayout.Button("Floor"))
+                    {
+                        GenerateComponent(0, pointer.transform.position);
+                    }
+
+                    if(GUILayout.Button("Wall"))
+                    {
+                        GenerateComponent(1, pointer.transform.position);
+                    }
+
+                    if(GUILayout.Button("Roof"))
+                    {
+                        GenerateComponent(2, pointer.transform.position);
+                    }
+                }
+
+                GUILayout.EndVertical();
+
+                this.SaveChanges();
+            }
+
+            else
+            {
+                isToolOn = false;
+                DestroyImmediate(pointer);
+            }
         }
+    }
 
-        if(GUILayout.Button("Wall"))
-        {
-            GenerateComponent(1);
-        }
-
-        if(GUILayout.Button("Roof"))
-        {
-            GenerateComponent(2);
-        }
-
-        GUILayout.EndVertical();
-
-        this.SaveChanges();
+    private void OnDisable()
+    {
+        if(pointer != null)
+        DestroyImmediate(pointer);
     }
 }
