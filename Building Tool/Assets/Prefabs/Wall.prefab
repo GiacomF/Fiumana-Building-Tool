@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4491336358068162342}
   - component: {fileID: 3452853760272257939}
   - component: {fileID: 8060295264249103156}
+  - component: {fileID: 6666768217648012288}
   m_Layer: 6
   m_Name: Wall
   m_TagString: Untagged
@@ -101,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94623ec537d2dc4408591107d3517af9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlugType: 1
+  PlugType: 0
 --- !u!54 &8060295264249103156
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,6 +130,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &6666768217648012288
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8055954126827426}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.0000002, z: 1.0000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &877098273943412471
 PrefabInstance:
   m_ObjectHideFlags: 0
