@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,11 +10,25 @@ public class BuildingTool : EditorWindow
         GetWindow<BuildingTool>("Build Tool");
     }
 
-    GameObject pointer;
+    private List<GameObject> components = new List<GameObject>();
 
+    GameObject pointer;
     private void GenerateComponent(int listPos, Vector3 pos)
     {
         Instantiate(settings.compList[listPos], pos, Quaternion.identity);
+    }
+
+    Ray ray;
+    void OnSceneGUI(SceneView sceneView)
+    {
+        Event currEvent = Event.current;
+        Ray ray = HandleUtility.GUIPointToWorldRay(currEvent.mousePosition);
+
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            pointer.transform.position = hit.point;
+        }
     }
 
     Settings_SO settings;
@@ -27,6 +42,11 @@ public class BuildingTool : EditorWindow
     {
         HandleSettings();
         
+        if(pointer != null)
+        {
+            pointer.GetComponent<Pointer>().AdjustPosition(ray);
+        }
+
         if(GUILayout.Button("Tool On"))
         {    
             if(!isToolOn)
@@ -34,6 +54,8 @@ public class BuildingTool : EditorWindow
                 isToolOn = true;
 
                 pointer = Instantiate(settings.pointer);
+
+                SceneView.duringSceneGui += OnSceneGUI;
 
                 GUILayout.BeginVertical();
 
@@ -62,6 +84,7 @@ public class BuildingTool : EditorWindow
 
             else
             {
+                SceneView.duringSceneGui -= OnSceneGUI;
                 isToolOn = false;
                 DestroyImmediate(pointer);
             }
@@ -69,7 +92,8 @@ public class BuildingTool : EditorWindow
     }
 
     private void OnDisable()
-    {
+    {    
+        SceneView.duringSceneGui -= OnSceneGUI;
         if(pointer != null)
         DestroyImmediate(pointer);
     }

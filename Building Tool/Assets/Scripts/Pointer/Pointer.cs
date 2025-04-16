@@ -5,12 +5,12 @@ public class Pointer : MonoBehaviour
     [SerializeField]
     private LayerMask validLayer;
 
-    private void Update()
+    public void AdjustPosition(Ray ray)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Debug.Log(ray.origin);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity, validLayer))
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             transform.position = hit.point;
         }   
