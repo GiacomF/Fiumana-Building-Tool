@@ -1,5 +1,7 @@
+using UnityEditor;
 using UnityEngine;
 
+[ExecuteAlways]
 public class Socket : Type
 {
     private Vector3 CalculateOffset(GameObject obj)
@@ -11,22 +13,35 @@ public class Socket : Type
         return new Vector3(transform.position.x, yOffset, transform.position.z);
     }
 
-    private void OnTriggerStay(Collider other)
+    private void CheckForPlugs()
     {
-        if(other.GetComponent<Plug>() != null)
+        Collider[] hits = Physics.OverlapSphere(transform.position, radius);
+
+        foreach (Collider other in hits)
         {
-            if(CompareType(other.GetComponent<Plug>().PlugType))
+            Plug plug = other.GetComponent<Plug>();
+            if (plug != null && CompareType(plug.PlugType))
             {
-                //Debug.Log("Socket and Plug match!");
                 other.transform.position = CalculateOffset(other.gameObject);
             }
         }
     }
 
     float radius;
-    private void Start()
+    private void OnEnable()
     {
         radius = GetComponent<SphereCollider>().radius;
+        EditorApplication.update += EditorUpdate;
+    }
+
+    private void EditorUpdate()
+    {
+        CheckForPlugs();   
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.update -= EditorUpdate;
     }
 
     private void OnDrawGizmos()

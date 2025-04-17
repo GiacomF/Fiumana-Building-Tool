@@ -23,12 +23,25 @@ public class BuildingTool : EditorWindow
     void OnSceneGUI(SceneView sceneView)
     {
         Event currEvent = Event.current;
+
         Ray ray = HandleUtility.GUIPointToWorldRay(currEvent.mousePosition);
 
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity) && currPreview != null)
+        if(Physics.Raycast(ray, out hit, Mathf.Infinity, settings.correctLayer) && currPreview != null)
         {
             currPreview.transform.position = hit.point;
+            SceneView.RepaintAll();
+        }
+
+        float yDeg = currPreview.transform.rotation.y;
+        if(yDeg > 360f)
+        {
+            currPreview.transform.rotation = Quaternion.Euler(0,0,0);
+        }
+
+        if(currEvent.type == EventType.MouseDown && currEvent.button == 0)
+        {
+            PlaceComponent();
         }
     }
 
@@ -70,6 +83,11 @@ public class BuildingTool : EditorWindow
         currPreview = Instantiate(components[(int)typeSelected]);
     }
 
+    void PlaceComponent()
+    {
+        Instantiate(components[(int)typeSelected], currPreview.transform.position, Quaternion.identity);
+    }
+
     bool isToolOn = false;
     string folderPath;
     private void OnGUI()
@@ -78,8 +96,6 @@ public class BuildingTool : EditorWindow
         
         if(isToolOn)
         {
-            SceneView.duringSceneGui += OnSceneGUI;
-
             EditorGUI.BeginChangeCheck();
 
             GUILayout.BeginVertical();
@@ -94,24 +110,30 @@ public class BuildingTool : EditorWindow
 
             typeSelected = (COMPONENTTYPE)EditorGUILayout.EnumPopup("Component Selected", typeSelected);
 
-            GUILayout.EndVertical();
-
             if(EditorGUI.EndChangeCheck())
             {
                 if(components.Count > 0)
                 CreatePreview();
             }
+
+            if(GUILayout.Button("Rotate component"))
+            {
+                currPreview.transform.Rotate(0,90,0, Space.World);
+            }
+
+            GUILayout.EndVertical();
         }
 
-        else
-        {
-            SceneView.duringSceneGui -= OnSceneGUI;
-            isToolOn = false;
-        }
-
-        if(GUILayout.Button("Tool On"))
+        if(GUILayout.Button(isToolOn ? "Tool Off" : "Tool On"))
         {    
             isToolOn = !isToolOn;
+
+            if(isToolOn)
+            {  
+                SceneView.duringSceneGui += OnSceneGUI;
+            }
+            else
+            SceneView.duringSceneGui -= OnSceneGUI;
         }
     }
 

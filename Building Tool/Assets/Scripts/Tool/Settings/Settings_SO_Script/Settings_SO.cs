@@ -7,5 +7,5 @@ public class Settings_SO : ScriptableObject
     [SerializeField]
     public List<GameObject> compList;
     [SerializeField]
-    public GameObject pointer;
+    public LayerMask correctLayer;
 }

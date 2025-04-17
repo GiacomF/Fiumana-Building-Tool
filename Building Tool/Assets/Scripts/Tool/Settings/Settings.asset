@@ -16,4 +16,6 @@ MonoBehaviour:
   - {fileID: 5812854604388060375, guid: 3f116ea244445dd41a3aee4d770ede3f, type: 3}
   - {fileID: 8055954126827426, guid: 112d9012662a0ae4aa2dd5a136679e68, type: 3}
   - {fileID: 5699974598696213062, guid: 2767d0efdc4600447af3aa25b0d0362c, type: 3}
-  pointer: {fileID: 8096824891324585475, guid: 7c6aa84ea9929d940b724673a26463e9, type: 3}
+  correctLayer:
+    serializedVersion: 2
+    m_Bits: 128
