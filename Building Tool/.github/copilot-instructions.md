@@ -8,7 +8,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, Water, UI, Plug, BuildableSurface
 - Active game object:
-  - Name: Pointer(Clone)
+  - Name: Plane
   - Tag: Untagged
-  - Layer: Default
+  - Layer: BuildableSurface
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->

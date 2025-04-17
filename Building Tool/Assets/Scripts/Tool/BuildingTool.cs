@@ -10,6 +10,14 @@ public class BuildingTool : EditorWindow
         GetWindow<BuildingTool>("Build Tool");
     }
 
+    enum COMPONENTTYPE
+    {
+        None,
+        Floor,
+        Wall,
+        Roof
+    }
+
     private List<GameObject> components = new List<GameObject>();
 
     GameObject pointer;
@@ -27,7 +35,7 @@ public class BuildingTool : EditorWindow
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            pointer.transform.position = hit.point;
+
         }
     }
 
@@ -38,56 +46,32 @@ public class BuildingTool : EditorWindow
     }
 
     bool isToolOn = false;
+    COMPONENTTYPE typeSelected = COMPONENTTYPE.None;
     private void OnGUI()
     {
         HandleSettings();
         
-        if(pointer != null)
+        if(isToolOn)
         {
-            pointer.GetComponent<Pointer>().AdjustPosition(ray);
+            SceneView.duringSceneGui += OnSceneGUI;
+
+            GUILayout.BeginVertical();
+
+            typeSelected = (COMPONENTTYPE)EditorGUILayout.EnumPopup("Component Selected", typeSelected);
+
+            GUILayout.EndVertical();
+        }
+
+        else
+        {
+            SceneView.duringSceneGui -= OnSceneGUI;
+            isToolOn = false;
+            DestroyImmediate(pointer);
         }
 
         if(GUILayout.Button("Tool On"))
         {    
-            if(!isToolOn)
-            {
-                isToolOn = true;
-
-                pointer = Instantiate(settings.pointer);
-
-                SceneView.duringSceneGui += OnSceneGUI;
-
-                GUILayout.BeginVertical();
-
-                if(pointer != null)
-                {
-                    if(GUILayout.Button("Floor"))
-                    {
-                        GenerateComponent(0, pointer.transform.position);
-                    }
-
-                    if(GUILayout.Button("Wall"))
-                    {
-                        GenerateComponent(1, pointer.transform.position);
-                    }
-
-                    if(GUILayout.Button("Roof"))
-                    {
-                        GenerateComponent(2, pointer.transform.position);
-                    }
-                }
-
-                GUILayout.EndVertical();
-
-                this.SaveChanges();
-            }
-
-            else
-            {
-                SceneView.duringSceneGui -= OnSceneGUI;
-                isToolOn = false;
-                DestroyImmediate(pointer);
-            }
+            isToolOn = !isToolOn;
         }
     }
 
