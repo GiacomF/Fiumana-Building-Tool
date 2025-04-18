@@ -18,20 +18,40 @@ public class BuildingTool : EditorWindow
         Wall
     }
 
+    void RayCollisionCheck(Event currEvent)
+    {
+        if (currPreview == null) return;
 
-    Ray ray;
+        Ray ray = HandleUtility.GUIPointToWorldRay(currEvent.mousePosition);
+        if (!Physics.Raycast(ray, out var hit, Mathf.Infinity))
+        {
+            SceneView.RepaintAll();
+            return;
+        }
+
+        if (hit.collider.CompareTag("Socket"))
+        {
+            Debug.Log("Socket");
+            currPreview.transform.position = hit.collider.bounds.center;
+        }
+        else
+        {
+            int hitLayerMask = 1 << hit.collider.gameObject.layer;
+            if ((settings.correctLayer & hitLayerMask) != 0)
+            {
+                Debug.Log("Ground");
+                currPreview.transform.position = hit.point;
+            }
+        }
+
+        SceneView.RepaintAll();
+    }
+
     void OnSceneGUI(SceneView sceneView)
     {
         Event currEvent = Event.current;
 
-        Ray ray = HandleUtility.GUIPointToWorldRay(currEvent.mousePosition);
-
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity, settings.correctLayer) && currPreview != null)
-        {
-            currPreview.transform.position = hit.point;
-            SceneView.RepaintAll();
-        }
+        RayCollisionCheck(currEvent);
 
         float yDeg = currPreview.transform.rotation.y;
         if(yDeg > 360f)
